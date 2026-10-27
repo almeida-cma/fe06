@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎨 Atividade Prática — Blog da Turma (HTML + CSS externo)</title>
+<style>
+  :root{
+    --bg-body:#0a0e1a;
+    --surface-dark:#0e1424;
+    --surface-hover:#1a2338;
+    --card-white:#ffffff;
+    --primary:#0d9488;
+    --primary-hover:#0f766e;
+    --accent:#6366f1;
+    --text-dark:#0f172a;
+    --text-muted:#64748b;
+    --border-light:#e2e8f0;
+    --border-dark:#334155;
+    --radius-main:20px;
+    --transicao:all .25s ease;
+    --fase-1:#0284c7;
+    --fase-2:#7c3aed;
+    --fase-3:#0d9488;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(circle at 15% 10%,#132238 0%,#0a0e1a 65%);
+    color:var(--text-dark);
+    min-height:100vh;
+    padding:24px 14px 90px;
+    line-height:1.6;
+  }
+  .container{max-width:1150px;margin:0 auto;}
+
+  .header{
+    background:linear-gradient(135deg,#134e4a 0%,#0d9488 45%,#6366f1 100%);
+    border-radius:var(--radius-main);
+    padding:38px 24px;
+    margin-bottom:24px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 12px 35px rgba(13,148,136,.35);
+  }
+  .header h1{
+    font-size:2rem;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .header h1 span{color:#c7d2fe;}
+  .header p{opacity:.95;font-size:1.05rem;max-width:900px;margin:0 auto;}
+  .badge-group{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px;}
+  .badge{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.3);
+    padding:5px 14px;
+    border-radius:30px;
+    font-size:.75rem;
+    font-weight:700;
+    color:#fff;
+  }
+
+  .tabs-nav{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:22px;}
+  .tab-btn{
+    background:var(--surface-dark);
+    color:#94a3b8;
+    border:1px solid var(--border-dark);
+    padding:12px 18px;
+    border-radius:30px;
+    font-size:.88rem;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:var(--transicao);
+    font-family:inherit;
+  }
+  .tab-btn:hover{color:#fff;background:var(--surface-hover);}
+  .tab-btn.active{
+    background:linear-gradient(135deg,#0f766e,#6366f1);
+    color:#fff;
+    border-color:#5eead4;
+    box-shadow:0 0 16px rgba(13,148,136,.45);
+  }
+  .tab-content{display:none;animation:fadeIn .3s ease-out;}
+  .tab-content.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .card{
+    background:var(--card-white);
+    border-radius:var(--radius-main);
+    padding:28px;
+    margin-bottom:24px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+  }
+  .card h2{
+    color:#0f766e;
+    margin-bottom:14px;
+    border-left:5px solid var(--primary);
+    padding-left:12px;
+    font-size:1.45rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .card h3{
+    color:#0f172a;
+    margin:22px 0 10px 0;
+    font-size:1.15rem;
+    border-bottom:2px dashed #cbd5e1;
+    padding-bottom:6px;
+  }
+  .card p{color:#334155;margin-bottom:12px;font-size:.96rem;}
+  .card ul,.card ol{color:#334155;line-height:1.8;margin:8px 0 14px 25px;font-size:.95rem;}
+  .card li{margin-bottom:4px;}
+
+  .highlight-box{padding:16px 20px;border-radius:12px;margin:14px 0;font-size:.94rem;line-height:1.7;}
+  .highlight-box.blue{background:#e0f2fe;border-left:5px solid #0284c7;color:#0c4a6e;}
+  .highlight-box.amber{background:#fef3c7;border-left:5px solid #d97706;color:#78350f;}
+  .highlight-box.rose{background:#ffe4e6;border-left:5px solid #e11d48;color:#881337;}
+  .highlight-box.green{background:#dcfce7;border-left:5px solid #16a34a;color:#14532d;}
+  .highlight-box.purple{background:#ede9fe;border-left:5px solid #7c3aed;color:#4c1d95;}
+  .highlight-box code{
+    background:rgba(255,255,255,.85);
+    border:1px solid rgba(0,0,0,.15);
+    color:#0f172a;
+    padding:2px 6px;
+    border-radius:4px;
+    font-weight:800;
+    font-family:'Courier New',monospace;
+    font-size:.88em;
+  }
+  code{
+    background:#f1f5f9;color:#0c4a6e;padding:2px 6px;border-radius:4px;
+    font-family:'Courier New',monospace;font-weight:700;font-size:.88em;border:1px solid var(--border-light);
+  }
+
+  .arvore-estrutura{
+    background:#0a1420;border-radius:14px;padding:22px 24px;margin:18px 0;
+    border:2px solid var(--border-dark);font-family:'Courier New',monospace;
+    font-size:.85rem;line-height:1.85;overflow-x:auto;
+  }
+  .arvore-estrutura .indent-1{padding-left:18px;}
+  .arvore-estrutura .indent-2{padding-left:36px;}
+  .arvore-estrutura .indent-3{padding-left:54px;}
+  .arvore-estrutura .indent-4{padding-left:72px;}
+  .arvore-estrutura .indent-5{padding-left:90px;}
+  .arvore-estrutura .tag-nome{color:#7dd3fc;font-weight:800;}
+  .arvore-estrutura .tag-attr{color:#fbbf24;}
+  .arvore-estrutura .tag-valor{color:#86efac;}
+  .arvore-estrutura .tag-omitir{color:#64748b;font-style:italic;font-size:.82rem;}
+
+  .etapa-card{
+    border-radius:14px;padding:22px;margin-bottom:22px;background:#f8fafc;
+    border:2px solid var(--border-light);position:relative;
+  }
+  .etapa-card::before{
+    content:attr(data-etapa);
+    position:absolute;top:-14px;left:20px;
+    background:var(--etapa-color, #0369a1);color:#fff;
+    padding:5px 16px;border-radius:20px;font-size:.72rem;font-weight:900;
+    letter-spacing:.5px;
+  }
+  .etapa-card h3{margin-top:6px;border:0;padding:0;color:#0f172a;font-size:1.1rem;margin-bottom:12px;}
+  .etapa-card p{font-size:.93rem;}
+
+  .etapa-card[data-num="1"]{--etapa-color:var(--fase-1);}
+  .etapa-card[data-num="2"]{--etapa-color:var(--fase-1);}
+  .etapa-card[data-num="3"]{--etapa-color:var(--fase-1);}
+  .etapa-card[data-num="4"]{--etapa-color:var(--fase-2);}
+  .etapa-card[data-num="5"]{--etapa-color:var(--fase-2);}
+  .etapa-card[data-num="6"]{--etapa-color:var(--fase-2);}
+  .etapa-card[data-num="7"]{--etapa-color:var(--fase-3);}
+  .etapa-card[data-num="8"]{--etapa-color:var(--fase-3);}
+  .etapa-card[data-num="9"]{--etapa-color:var(--fase-3);}
+
+  .etapa-preview{
+    margin-top:14px;border:2px solid var(--border-dark);border-radius:12px;overflow:hidden;
+    background:#0a1420;
+  }
+  .etapa-preview .preview-topo{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 14px;background:#0e1424;border-bottom:1px solid var(--border-dark);
+    flex-wrap:wrap;gap:6px;
+  }
+  .etapa-preview .preview-topo span{
+    color:#cbd5e1;font-family:monospace;font-size:.78rem;
+  }
+  .etapa-preview iframe{
+    width:100%;height:auto;min-height:160px;border:none;background:#fff;display:block;
+  }
+  .etapa-preview .legenda{
+    padding:10px 14px;background:#0e1424;color:#cbd5e1;font-size:.82rem;
+    border-top:1px solid var(--border-dark);line-height:1.6;
+  }
+  .etapa-preview .legenda strong{color:#5eead4;}
+
+  .resultado-frame{
+    margin:18px 0;border:2px solid var(--border-dark);border-radius:14px;overflow:hidden;background:#0a1420;
+  }
+  .resultado-frame .frame-topo{
+    display:flex;justify-content:space-between;align-items:center;padding:10px 16px;
+    background:#0e1424;border-bottom:1px solid var(--border-dark);flex-wrap:wrap;gap:8px;
+  }
+  .resultado-frame .frame-topo .url-fake{
+    color:#cbd5e1;font-family:monospace;font-size:.82rem;display:flex;align-items:center;gap:6px;
+  }
+  .resultado-frame .frame-topo .url-fake::before{content:'🌐';}
+  .resultado-frame .frame-topo button{
+    background:#334155;color:#f1f5f9;border:none;padding:5px 12px;border-radius:6px;
+    font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;transition:var(--transicao);
+  }
+  .resultado-frame .frame-topo button:hover{background:#475569;}
+  .resultado-frame .frame-topo button.btn-primario{background:#0d9488;color:#fff;}
+  .resultado-frame iframe{width:100%;height:1100px;border:none;background:#fff;display:block;}
+
+  .validacao-item{
+    display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:#f8fafc;
+    border-radius:10px;border-left:4px solid #0d9488;margin-bottom:10px;
+    transition:var(--transicao);cursor:pointer;
+  }
+  .validacao-item:hover{background:#f1f5f9;}
+  .validacao-item.concluido{border-left-color:#16a34a;background:#dcfce7;}
+  .validacao-item .check-box{
+    width:24px;height:24px;border:2px solid #0d9488;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;color:#fff;
+    font-weight:900;background:#fff;flex-shrink:0;margin-top:2px;font-size:.85rem;
+  }
+  .validacao-item.concluido .check-box{background:#16a34a;border-color:#16a34a;}
+  .validacao-item.concluido .check-box::after{content:'✓';}
+  .validacao-item .info{flex:1;}
+  .validacao-item .info strong{display:block;color:#0f172a;font-size:.92rem;margin-bottom:3px;}
+  .validacao-item .info p{font-size:.85rem;color:#475569;margin:0;line-height:1.55;}
+
+  .validacao-progresso{
+    background:#0e1424;color:#fff;border-radius:10px;padding:14px 20px;margin-bottom:18px;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .validacao-progresso span{font-size:.9rem;font-weight:700;}
+  .validacao-barra{flex:1;min-width:140px;height:10px;background:#334155;border-radius:5px;overflow:hidden;}
+  .validacao-barra-preenchimento{
+    height:100%;width:0%;background:linear-gradient(90deg,#0d9488,#6366f1);transition:width .4s;
+  }
+
+  .acoes-aluno{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .acoes-aluno button{
+    border:0;border-radius:8px;padding:10px 16px;font-weight:800;cursor:pointer;
+    font-family:inherit;font-size:.85rem;transition:var(--transicao);
+  }
+  .btn-exportar{background:#0d9488;color:#fff;}
+  .btn-exportar:hover{background:#0f766e;}
+  .btn-limpar-checklist{background:#e2e8f0;color:#0f172a;}
+  .btn-limpar-checklist:hover{background:#cbd5e1;}
+
+  .teste-item{
+    background:#fef3c7;border-left:4px solid #d97706;border-radius:10px;
+    padding:14px 18px;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start;
+  }
+  .teste-num{
+    width:28px;height:28px;border-radius:50%;background:#d97706;color:#fff;font-weight:900;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.85rem;
+  }
+  .teste-corpo{flex:1;}
+  .teste-corpo strong{display:block;color:#78350f;font-size:.94rem;margin-bottom:3px;}
+  .teste-corpo p{margin:0;font-size:.88rem;color:#78350f;line-height:1.6;}
+
+  .tabela-estudo{
+    width:100%;border-collapse:collapse;font-size:.88rem;margin:14px 0;
+    background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  }
+  .tabela-estudo thead tr{background:linear-gradient(135deg,#0f766e,#6366f1);color:#fff;}
+  .tabela-estudo th{padding:12px;text-align:left;font-weight:800;}
+  .tabela-estudo td{padding:10px 12px;border-bottom:1px solid #e2e8f0;color:#334155;vertical-align:top;}
+  .tabela-estudo tbody tr:hover{background:#f8fafc;}
+
+  .btn-top{
+    position:fixed;bottom:20px;right:20px;background:var(--primary);color:#fff;
+    border:none;padding:10px 18px;border-radius:50px;cursor:pointer;font-size:12px;
+    font-weight:700;box-shadow:0 4px 15px rgba(0,0,0,.25);z-index:100;
+  }
+
+  .toast-export{
+    position:fixed;bottom:24px;right:24px;background:#0d9488;color:#fff;
+    padding:12px 20px;border-radius:10px;font-weight:bold;font-size:.85rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);display:none;z-index:9999;
+    animation:slideUp .3s ease;max-width:340px;line-height:1.5;
+  }
+  .toast-export.show{display:block;}
+  @keyframes slideUp{
+    from{transform:translateY(20px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+  }
+
+  @media (max-width:768px){
+    .header h1{font-size:1.6rem;}
+    .card{padding:18px 14px;}
+    .tab-btn{padding:10px 14px;font-size:.8rem;}
+    .resultado-frame iframe{height:900px;}
+    .arvore-estrutura{font-size:.75rem;padding:16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header class="header">
+    <h1>🎨 Atividade Prática — <span>Blog da Turma</span></h1>
+    <p>Você vai construir a página de um blog escolar em duas partes: primeiro o <strong>HTML</strong>, depois um <strong>arquivo CSS externo</strong> chamado <code>estilo.css</code>. Cada etapa mostra apenas o <strong>resultado esperado na tela</strong> — o código é você quem deduz.</p>
+    <div class="badge-group">
+      <span class="badge">🧱 HTML puro</span>
+      <span class="badge">🎨 CSS externo (estilo.css)</span>
+      <span class="badge">📐 9 etapas em 3 fases</span>
+      <span class="badge">✅ Validação em checklist</span>
+      <span class="badge">📤 Exportar progresso</span>
+    </div>
+  </header>
+
+  <nav class="tabs-nav">
+    <button type="button" class="tab-btn active" data-aba="aba-visao">🎯 1. Visão geral</button>
+    <button type="button" class="tab-btn" data-aba="aba-html">🧱 2. Fase HTML</button>
+    <button type="button" class="tab-btn" data-aba="aba-css">🎨 3. Fase CSS</button>
+    <button type="button" class="tab-btn" data-aba="aba-resultado">👁️ 4. Resultado final</button>
+    <button type="button" class="tab-btn" data-aba="aba-validacao">✅ 5. Validação</button>
+    <button type="button" class="tab-btn" data-aba="aba-testes">🧪 6. Testes</button>
+  </nav>
+
+  <!-- ============ ABA 1 — VISÃO GERAL ============ -->
+  <div id="aba-visao" class="tab-content active">
+    <section class="card">
+      <h2>🎯 O que você vai construir</h2>
+
+      <p>Uma página chamada <strong>Blog da Turma</strong>, com cabeçalho, menu de navegação com três âncoras, três postagens, uma tabela de agenda e um formulário de contato. O HTML precisa estar correto <em>antes</em> de você começar a pensar no CSS — e o CSS vem em um <strong>arquivo separado</strong>, ligado ao HTML.</p>
+
+      <div class="highlight-box blue">
+        <strong>📋 Regras fundamentais:</strong>
+        <ul style="margin:8px 0 0 22px;color:#0c4a6e;">
+          <li>Você vai criar <strong>dois arquivos</strong>: <code>index.html</code> e <code>estilo.css</code>, na mesma pasta.</li>
+          <li><strong>Nenhum CSS dentro do HTML</strong>: sem atributo <code>style</code>, sem tag <code>&lt;style&gt;</code>.</li>
+          <li><strong>Nenhum JavaScript</strong>.</li>
+          <li><strong>Não use</strong> <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code> nem <code>&lt;div&gt;</code> — use os mesmos elementos do exercício anterior.</li>
+          <li>O arquivo CSS é ligado ao HTML pela tag <code>&lt;link rel="stylesheet" href="estilo.css"&gt;</code>, dentro do <code>&lt;head&gt;</code>.</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ Como esta atividade funciona:</strong> na aba <em>Fase HTML</em> você vê apenas o <strong>resultado esperado</strong> de cada etapa. Na aba <em>Fase CSS</em>, cada etapa mostra o mesmo HTML antes e depois de você aplicar o CSS — com uma legenda dizendo <strong>o que mudou na tela</strong>, não o código. Você decide quais propriedades usar para produzir aquela mudança.
+      </div>
+
+      <h3>🏗️ Mapa conceitual da estrutura HTML</h3>
+      <p>Este é o mapa do HTML final. Os textos exatos estão descritos nas etapas da aba 2.</p>
+
+      <div class="arvore-estrutura">
+        <div class="indent-1"><span class="tag-nome">&lt;!DOCTYPE html&gt;</span></div>
+        <div class="indent-1"><span class="tag-nome">&lt;html</span> <span class="tag-attr">lang</span>=<span class="tag-valor">"pt-BR"</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-2"><span class="tag-nome">&lt;head&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;meta</span> <span class="tag-attr">charset</span>=<span class="tag-valor">"UTF-8"</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;title&gt;</span><span class="tag-omitir">[título da aba]</span><span class="tag-nome">&lt;/title&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;link</span> <span class="tag-attr">rel</span>=<span class="tag-valor">"stylesheet"</span> <span class="tag-attr">href</span>=<span class="tag-valor">"estilo.css"</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-2"><span class="tag-nome">&lt;/head&gt;</span></div>
+        <div class="indent-2"><span class="tag-nome">&lt;body&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h1&gt;</span><span class="tag-omitir">[nome do blog]</span><span class="tag-nome">&lt;/h1&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;p&gt;</span><span class="tag-omitir">[subtítulo]</span><span class="tag-nome">&lt;/p&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;nav&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;a</span> <span class="tag-attr">href</span>=<span class="tag-valor">"#postagens"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/a&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;a</span> <span class="tag-attr">href</span>=<span class="tag-valor">"#agenda"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/a&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;a</span> <span class="tag-attr">href</span>=<span class="tag-valor">"#contato"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/a&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;/nav&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;hr&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h2</span> <span class="tag-attr">id</span>=<span class="tag-valor">"postagens"</span><span class="tag-nome">&gt;</span><span class="tag-omitir">[título]</span><span class="tag-nome">&lt;/h2&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h3&gt;</span><span class="tag-omitir">[título da postagem 1]</span><span class="tag-nome">&lt;/h3&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;p&gt;</span>…<span class="tag-nome">&lt;/p&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h3&gt;</span><span class="tag-omitir">[título da postagem 2]</span><span class="tag-nome">&lt;/h3&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;p&gt;</span>…<span class="tag-nome">&lt;/p&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h3&gt;</span><span class="tag-omitir">[título da postagem 3]</span><span class="tag-nome">&lt;/h3&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;p&gt;</span>…<span class="tag-nome">&lt;/p&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;hr&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h2</span> <span class="tag-attr">id</span>=<span class="tag-valor">"agenda"</span><span class="tag-nome">&gt;</span><span class="tag-omitir">[título]</span><span class="tag-nome">&lt;/h2&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;table</span> <span class="tag-attr">border</span>=<span class="tag-valor">"1"</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;tr&gt;&lt;th&gt;</span>…<span class="tag-nome">&lt;/th&gt;&lt;th&gt;</span>…<span class="tag-nome">&lt;/th&gt;&lt;th&gt;</span>…<span class="tag-nome">&lt;/th&gt;&lt;/tr&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;tr&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;/tr&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;tr&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;td&gt;</span>…<span class="tag-nome">&lt;/td&gt;&lt;/tr&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;/table&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;hr&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;h2</span> <span class="tag-attr">id</span>=<span class="tag-valor">"contato"</span><span class="tag-nome">&gt;</span><span class="tag-omitir">[título]</span><span class="tag-nome">&lt;/h2&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;form</span> <span class="tag-attr">action</span>=<span class="tag-valor">"https://httpbin.org/post"</span> <span class="tag-attr">method</span>=<span class="tag-valor">"post"</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;label</span> <span class="tag-attr">for</span>=<span class="tag-valor">"nome"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/label&gt;</span> + <span class="tag-nome">&lt;input</span> <span class="tag-attr">type</span>=<span class="tag-valor">"text"</span> <span class="tag-attr">id</span>=<span class="tag-valor">"nome"</span> <span class="tag-attr">name</span>=<span class="tag-valor">"nome"</span> <span class="tag-attr">required</span><span class="tag-nome">&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;br&gt;&lt;br&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;label</span> <span class="tag-attr">for</span>=<span class="tag-valor">"assunto"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/label&gt;</span> + <span class="tag-nome">&lt;select</span> <span class="tag-attr">id</span>=<span class="tag-valor">"assunto"</span> <span class="tag-attr">name</span>=<span class="tag-valor">"assunto"</span><span class="tag-nome">&gt;</span> + 3 <span class="tag-nome">&lt;option&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;br&gt;&lt;br&gt;</span></div>
+        <div class="indent-4"><span class="tag-nome">&lt;button</span> <span class="tag-attr">type</span>=<span class="tag-valor">"submit"</span><span class="tag-nome">&gt;</span>…<span class="tag-nome">&lt;/button&gt;</span></div>
+        <div class="indent-3"><span class="tag-nome">&lt;/form&gt;</span></div>
+        <div class="indent-2"><span class="tag-nome">&lt;/body&gt;</span></div>
+        <div class="indent-1"><span class="tag-nome">&lt;/html&gt;</span></div>
+      </div>
+
+      <div class="highlight-box green">
+        <strong>✅ Elementos permitidos:</strong> apenas os que você já viu no exercício anterior — <code>h1</code>, <code>h2</code>, <code>h3</code>, <code>p</code>, <code>nav</code>, <code>a</code>, <code>ol</code>, <code>ul</code>, <code>li</code>, <code>hr</code>, <code>br</code>, <code>table</code>, <code>tr</code>, <code>th</code>, <code>td</code>, <code>form</code>, <code>label</code>, <code>input</code>, <code>select</code>, <code>option</code>, <code>button</code>, <code>strong</code>, <code>em</code>.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 2 — FASE HTML ============ -->
+  <div id="aba-html" class="tab-content">
+    <section class="card">
+      <h2>🧱 Fase 1 — Construir o HTML</h2>
+      <p>Antes de qualquer CSS. Em cada etapa, você vê o <strong>resultado esperado na tela</strong> e lê o texto que deve aparecer. O HTML que produz esse resultado é você quem escreve.</p>
+
+      <div class="highlight-box blue">
+        <strong>💡 Como usar:</strong> abra seu <code>index.html</code> no navegador ao lado desta aba. A cada etapa, compare a sua tela com a prévia. Se estiver diferente, ajuste o HTML antes de seguir.
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 1" data-num="1">
+        <h3>Estrutura inicial e cabeçalho</h3>
+        <p>Crie <code>index.html</code>. Defina <code>lang="pt-BR"</code>, <code>charset="UTF-8"</code> e o título da aba como <strong>Blog da Turma</strong>. No <code>body</code>, comece com um <code>&lt;h1&gt;</code> com o texto <strong>Blog da Turma</strong> e um <code>&lt;p&gt;</code> com o subtítulo <strong>Notícias, projetos e ideias dos estudantes.</strong></p>
+        <p>Por enquanto, <strong>não adicione o <code>&lt;link&gt;</code> do CSS</strong> — isso fica para a Fase 2.</p>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html — sem CSS</span></div>
+          <iframe title="Prévia da etapa 1" data-preview="etapa1"></iframe>
+          <div class="legenda"><strong>O que observar:</strong> o navegador aplica a fonte padrão e o <code>h1</code> aparece grande e em negrito, o <code>p</code> logo abaixo. Nada de cor ou alinhamento especial.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 2" data-num="2">
+        <h3>Menu de navegação com três âncoras</h3>
+        <p>Logo depois do parágrafo, crie um <code>&lt;nav&gt;</code> com três links separados pelo caractere <code>|</code>:</p>
+        <ul>
+          <li><strong>Postagens</strong> → aponta para <code>#postagens</code></li>
+          <li><strong>Agenda</strong> → aponta para <code>#agenda</code></li>
+          <li><strong>Contato</strong> → aponta para <code>#contato</code></li>
+        </ul>
+        <p>Depois do <code>&lt;/nav&gt;</code>, insira uma linha horizontal <code>&lt;hr&gt;</code>.</p>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html — sem CSS</span></div>
+          <iframe title="Prévia da etapa 2" data-preview="etapa2"></iframe>
+          <div class="legenda"><strong>O que observar:</strong> os links ficam <em>na mesma linha</em>, em azul e sublinhados. O <code>|</code> é texto comum entre eles. O <code>&lt;hr&gt;</code> desenha uma linha fina cinza.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 3" data-num="3">
+        <h3>Postagens, agenda e formulário</h3>
+        <p>Complete o restante do HTML. Use <code>&lt;h2 id="…"&gt;</code> antes de cada bloco (postagens, agenda, contato), <code>&lt;hr&gt;</code> separando os blocos, e os dados exatos abaixo.</p>
+
+        <div class="highlight-box purple">
+          <strong>📝 Postagens (3 títulos <code>&lt;h3&gt;</code> + 1 <code>&lt;p&gt;</code> cada):</strong>
+          <ol style="margin:6px 0 0 22px;">
+            <li><strong>Feira de ciências</strong> — "A feira acontece na próxima quinta-feira, no pátio da escola."</li>
+            <li><strong>Clube de leitura</strong> — "Os encontros são às quartas-feiras, na biblioteca."</li>
+            <li><strong>Projeto de robótica</strong> — "A equipe está montando um robô para a competição regional."</li>
+          </ol>
+        </div>
+
+        <div class="highlight-box purple">
+          <strong>📊 Agenda (tabela com <code>border="1"</code>):</strong>
+          <table class="tabela-estudo" style="margin-top:10px;">
+            <thead><tr><th>Data</th><th>Evento</th><th>Local</th></tr></thead>
+            <tbody>
+              <tr><td>10/05</td><td>Feira de ciências</td><td>Pátio</td></tr>
+              <tr><td>18/05</td><td>Clube de leitura</td><td>Biblioteca</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="highlight-box purple">
+          <strong>📝 Formulário:</strong>
+          <ul style="margin:6px 0 0 22px;">
+            <li><code>&lt;form action="https://httpbin.org/post" method="post"&gt;</code></li>
+            <li><code>label for="nome"</code> → texto "Seu nome:" + <code>input type="text" id="nome" name="nome" required</code></li>
+            <li>Depois do input: <code>&lt;br&gt;&lt;br&gt;</code></li>
+            <li><code>label for="assunto"</code> → texto "Assunto:" + <code>select id="assunto" name="assunto"</code> com três <code>&lt;option&gt;</code>: <em>Sugestão</em>, <em>Dúvida</em>, <em>Elogio</em> (sem <code>value</code>)</li>
+            <li>Depois do select: <code>&lt;br&gt;&lt;br&gt;</code></li>
+            <li><code>button type="submit"</code> com texto "Enviar mensagem"</li>
+          </ul>
+        </div>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html — sem CSS</span></div>
+          <iframe title="Prévia da etapa 3" data-preview="etapa3"></iframe>
+          <div class="legenda"><strong>O que observar:</strong> esta é a <strong>página inteira em HTML puro</strong> — o ponto de partida antes de qualquer CSS. A tabela tem grade visível, o formulário tem os campos e o botão. Compare com o seu <code>index.html</code>: devem estar visualmente idênticos.</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 3 — FASE CSS ============ -->
+  <div id="aba-css" class="tab-content">
+    <section class="card">
+      <h2>🎨 Fase 2 — Aplicar o CSS externo</h2>
+      <p>Agora você cria o arquivo <code>estilo.css</code> na <strong>mesma pasta</strong> do <code>index.html</code> e o liga ao HTML. Cada etapa mostra <strong>o mesmo HTML da etapa anterior</strong> já com o CSS aplicado, mais uma legenda dizendo o que mudou. O código é você quem escreve.</p>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ Antes de começar:</strong> no <code>&lt;head&gt;</code> do seu HTML, adicione <code>&lt;link rel="stylesheet" href="estilo.css"&gt;</code>. Sem isso, o navegador não carrega o CSS. Se a sua página continuar "crua", quase sempre é porque o <code>&lt;link&gt;</code> está faltando ou o nome do arquivo está diferente.
+      </div>
+
+      <div class="highlight-box blue">
+        <strong>💡 Como usar:</strong> escreva as regras aos poucos. Salve o <code>estilo.css</code>, recarregue o <code>index.html</code> no navegador e compare com a prévia desta etapa. Se ainda não bateu, veja a legenda: ela diz <strong>o que mudou</strong>, não como fazer.
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 4" data-num="4">
+        <h3>Fundo e tipografia da página</h3>
+        <p>Comece pelo <code>body</code>. Aplique:</p>
+        <ul>
+          <li>uma cor de fundo clara (aqui usamos um bege suave <code>#f8f5f0</code>);</li>
+          <li>uma família de fonte sem serifa (ex.: Arial, Verdana ou a família padrão <code>sans-serif</code>);</li>
+          <li>uma cor de texto escura (ex.: <code>#1f2937</code>);</li>
+          <li>um pouco de espaço interno para o conteúdo não colar na borda (ex.: <code>padding: 24px</code>);</li>
+          <li>uma altura de linha confortável (ex.: <code>line-height: 1.6</code>).</li>
+        </ul>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 4</span></div>
+          <iframe title="Prévia após etapa 4" data-preview="css1"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> o fundo da página deixou de ser branco. A fonte mudou de "Times" para uma sem serifa. O texto está com espaçamento mais confortável. Nenhuma cor forte ainda — o objetivo aqui é só a base.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 5" data-num="5">
+        <h3>Cores do título, do menu e dos links</h3>
+        <p>Agora dê identidade visual ao topo da página:</p>
+        <ul>
+          <li>o <code>h1</code> fica com uma cor de destaque (ex.: <code>#0d9488</code>) e centralizado;</li>
+          <li>o <code>nav</code> ganha um fundo escuro (ex.: <code>#0f172a</code>) e espaço interno;</li>
+          <li>os links do menu perdem o sublinhado, ficam brancos e com espaçamento entre si.</li>
+        </ul>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 5</span></div>
+          <iframe title="Prévia após etapa 5" data-preview="css2"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> o título ficou colorido e centralizado. O menu virou uma faixa escura, com links brancos e sem sublinhado. Os links ainda estão lado a lado porque o HTML já era <code>nav</code> + <code>a</code> inline. A barra vertical <code>|</code> entre eles continua visível — vamos resolver isso na próxima fase.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 6" data-num="6">
+        <h3>Espaçamento, linhas e tabela</h3>
+        <p>Deixe o conteúdo respirar:</p>
+        <ul>
+          <li>dê margem abaixo dos parágrafos;</li>
+          <li>esconda o <code>&lt;hr&gt;</code> trocando a borda por uma linha clara (ou retire a borda e adicione <code>border-top</code> suave);</li>
+          <li>na tabela, faça as células terem <strong>espaço interno</strong>, o cabeçalho ter <strong>fundo colorido</strong> e o texto das células ficar alinhado à esquerda.</li>
+        </ul>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 6</span></div>
+          <iframe title="Prévia após etapa 6" data-preview="css3"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> os parágrafos estão mais separados. As linhas horizontais ficaram mais discretas. A tabela ganhou cabeçalho com fundo colorido e células com respiro interno — sem perder a grade do <code>border="1"</code>.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 7" data-num="7">
+        <h3>Formulário em "cartão"</h3>
+        <p>Transforme o formulário em um bloco visualmente destacado:</p>
+        <ul>
+          <li>fundo branco, borda suave e cantos arredondados;</li>
+          <li>espaço interno generoso;</li>
+          <li>largura máxima de <code>420px</code> e centralizado na página;</li>
+          <li>uma sombra suave para dar profundidade.</li>
+        </ul>
+        <p>Não altere o HTML do formulário — tudo isso é feito com o seletor <code>form</code>.</p>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 7</span></div>
+          <iframe title="Prévia após etapa 7" data-preview="css4"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> o formulário agora parece um cartão separado do resto da página. Os campos continuam com aparência padrão do navegador — não estamos estilizando <code>input</code> nem <code>select</code> ainda. O botão também continua padrão.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 8" data-num="8">
+        <h3>Menu em linha e botão estilizado</h3>
+        <p>Duas mudanças pontuais que exigem mais cuidado:</p>
+        <ul>
+          <li>no <code>nav</code>, faça os links ficarem distribuídos horizontalmente com espaço entre eles. Você pode usar <code>display: flex</code> + <code>gap</code> no <code>nav</code>, e esconder o texto do separador <code>|</code> reduzindo o <code>font-size</code> ou envolvendo-o em algo que o CSS esconda — mas sem alterar o HTML;</li>
+          <li>no <code>button</code>, aplique fundo colorido, texto branco, cantos arredondados, espaço interno e remova a borda padrão.</li>
+        </ul>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 8</span></div>
+          <iframe title="Prévia após etapa 8" data-preview="css5"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> os links do menu agora estão alinhados como uma barra, com espaçamento uniforme. O botão do formulário ficou colorido e arredondado. O separador <code>|</code> entre os links praticamente sumiu visualmente.</div>
+        </div>
+      </div>
+
+      <div class="etapa-card" data-etapa="ETAPA 9" data-num="9">
+        <h3>Acabamento: sombra no menu e espaçamento dos títulos</h3>
+        <p>Últimos ajustes de polimento:</p>
+        <ul>
+          <li>uma sombra suave no <code>nav</code> para destacá-lo do fundo;</li>
+          <li>margem superior nos <code>h2</code> para separar visualmente os blocos;</li>
+          <li>um <code>h2</code> com cor de destaque parecida com a do <code>h1</code>.</li>
+        </ul>
+
+        <div class="etapa-preview">
+          <div class="preview-topo"><span>index.html + estilo.css — após etapa 9 (resultado final)</span></div>
+          <iframe title="Prévia após etapa 9" data-preview="css6"></iframe>
+          <div class="legenda"><strong>O que mudou:</strong> o menu ganhou profundidade com a sombra. Os títulos das seções estão mais separados e com cor. A página inteira tem agora uma identidade visual coerente — e você chegou a ela <strong>sem copiar CSS pronto</strong>, deduzindo a partir da descrição e da prévia.</div>
+        </div>
+      </div>
+
+      <div class="highlight-box green" style="margin-top:20px;">
+        <strong>✅ Se a sua tela bate com a etapa 9</strong>, você concluiu a atividade. Se alguma etapa não bateu, volte à legenda daquela etapa: ela diz exatamente <em>o que</em> deveria ter mudado. Você não precisa acertar a "cor exata" — precisa produzir o <em>efeito</em> descrito.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 4 — RESULTADO FINAL ============ -->
+  <div id="aba-resultado" class="tab-content">
+    <section class="card">
+      <h2>👁️ Resultado final esperado</h2>
+      <p>Esta é a aparência da página completa, com o HTML da Fase 1 e o CSS da Fase 2 aplicados. Use como referência final.</p>
+
+      <div class="highlight-box amber">
+        <strong>⚠️ Lembre-se:</strong> este resultado usa as cores e medidas sugeridas nas etapas. A sua versão pode usar outras cores e outros valores — desde que produza os mesmos <strong>efeitos</strong> (fundo claro, menu escuro em linha, tabela com cabeçalho colorido, formulário em cartão, botão colorido). O que importa é o efeito, não o valor exato.
+      </div>
+
+      <div class="resultado-frame">
+        <div class="frame-topo">
+          <span class="url-fake">file:///index.html</span>
+          <div class="frame-acoes">
+            <button type="button" class="btn-primario" id="btn-recriar-frame">🔄 Recarregar</button>
+          </div>
+        </div>
+        <iframe id="iframe-resultado" title="Aparência final esperada do Blog da Turma"></iframe>
+      </div>
+
+      <h3>🔍 O que observar no resultado final</h3>
+      <ul>
+        <li><strong>Fundo</strong> claro e agradável, sem ser branco puro.</li>
+        <li><strong>Título principal</strong> colorido e centralizado.</li>
+        <li><strong>Menu</strong> como faixa escura, com links brancos lado a lado.</li>
+        <li><strong>Postagens</strong> com espaçamento confortável entre título e texto.</li>
+        <li><strong>Tabela</strong> com cabeçalho colorido e células alinhadas.</li>
+        <li><strong>Formulário</strong> como cartão branco com sombra, centralizado.</li>
+        <li><strong>Botão</strong> colorido e arredondado.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ============ ABA 5 — VALIDAÇÃO ============ -->
+  <div id="aba-validacao" class="tab-content">
+    <section class="card">
+      <h2>✅ Validação item a item</h2>
+      <p>Marque cada requisito conforme confirmar no seu código. Não é uma correção automática — é uma lista para você não esquecer nada.</p>
+
+      <div class="validacao-progresso">
+        <span id="validacao-contador">0 de 0 requisitos verificados</span>
+        <div class="validacao-barra"><div class="validacao-barra-preenchimento" id="validacao-barra"></div></div>
+      </div>
+
+      <div class="highlight-box blue">
+        <strong>💾 Seu progresso é salvo automaticamente</strong> neste navegador. Se fechar a página e voltar depois, as marcações continuam. Ao terminar, clique em <strong>"Exportar meu progresso (JSON)"</strong> e entregue o arquivo ao professor — ele restaura o checklist e usa como base da avaliação.
+      </div>
+
+      <h3>HTML — estrutura base</h3>
+      <div id="lista-validacao-base" class="validacao-lista"></div>
+
+      <h3>HTML — cabeçalho, menu e postagens</h3>
+      <div id="lista-validacao-conteudo" class="validacao-lista"></div>
+
+      <h3>HTML — agenda e formulário</h3>
+      <div id="lista-validacao-form" class="validacao-lista"></div>
+
+      <h3>CSS — fundo, tipografia e menu</h3>
+      <div id="lista-validacao-css1" class="validacao-lista"></div>
+
+      <h3>CSS — tabela, formulário e botão</h3>
+      <div id="lista-validacao-css2" class="validacao-lista"></div>
+
+      <div class="acoes-aluno">
+        <button type="button" class="btn-exportar" id="btn-exportar">⬇ Exportar meu progresso (JSON)</button>
+        <button type="button" class="btn-limpar-checklist" id="btn-limpar-checklist">🧹 Limpar todas as marcações</button>
+      </div>
+
+      <div class="highlight-box green" style="margin-top:20px;">
+        <strong>✅ Quando tudo estiver marcado</strong>, sua página cumpre o enunciado. Exporte o JSON e entregue ao professor.
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ ABA 6 — TESTES ============ -->
+  <div id="aba-testes" class="tab-content">
+    <section class="card">
+      <h2>🧪 Testes</h2>
+      <p>Faça os testes na ordem, com o <code>index.html</code> aberto no navegador.</p>
+
+      <div class="teste-item"><div class="teste-num">1</div><div class="teste-corpo"><strong>O CSS está carregando?</strong><p>Se a página estiver com fundo branco, fonte "Times" e links azuis sublinhados, o <code>&lt;link rel="stylesheet" href="estilo.css"&gt;</code> não está funcionando. Verifique se o nome do arquivo é exatamente <code>estilo.css</code> e se ele está na mesma pasta do <code>index.html</code>.</p></div></div>
+      <div class="teste-item"><div class="teste-num">2</div><div class="teste-corpo"><strong>Navegação — Postagens</strong><p>Clique em <strong>Postagens</strong> no menu. A página deve rolar até o bloco de postagens. A URL termina com <code>#postagens</code>.</p></div></div>
+      <div class="teste-item"><div class="teste-num">3</div><div class="teste-corpo"><strong>Navegação — Agenda e Contato</strong><p>Repita para <strong>Agenda</strong> (<code>#agenda</code>) e <strong>Contato</strong> (<code>#contato</code>). Se algum link não rolar, verifique se o <code>id</code> correspondente está no <code>h2</code> certo.</p></div></div>
+      <div class="teste-item"><div class="teste-num">4</div><div class="teste-corpo"><strong>Menu como barra</strong><p>Os três links do menu devem aparecer lado a lado, com espaço entre eles, sem sublinhado e em cor contrastante com o fundo escuro. Se ainda houver <code>|</code> visível entre eles, volte à etapa 8 — a legenda explica o que deveria ter mudado.</p></div></div>
+      <div class="teste-item"><div class="teste-num">5</div><div class="teste-corpo"><strong>Formulário como cartão</strong><p>O formulário deve aparecer como um bloco branco separado do resto, com cantos arredondados e sombra suave. Se estiver "colado" no fundo, o seletor <code>form</code> pode não ter sido aplicado corretamente.</p></div></div>
+      <div class="teste-item"><div class="teste-num">6</div><div class="teste-corpo"><strong>Envio do formulário</strong><p>Preencha o nome, escolha um assunto e clique em <strong>Enviar mensagem</strong>. Com internet, o httpbin responde com um JSON contendo <code>"form": {"nome": "...", "assunto": "..."}</code>. Sem internet, o navegador mostra erro de destino — o que já prova que o formulário tentou enviar.</p></div></div>
+      <div class="teste-item"><div class="teste-num">7</div><div class="teste-corpo"><strong>Nenhum CSS no HTML</strong><p>Abra o <code>index.html</code> no editor e procure por <code>style=</code> e <code>&lt;style&gt;</code>. Não deve haver nenhum. Todo o CSS deve estar no <code>estilo.css</code>.</p></div></div>
+      <div class="teste-item"><div class="teste-num">8</div><div class="teste-corpo"><strong>Nenhum JavaScript</strong><p>Procure por <code>&lt;script&gt;</code> no <code>index.html</code>. Não deve existir nenhum.</p></div></div>
+
+      <div class="highlight-box rose">
+        <strong>⚠️ Lembrete:</strong> o httpbin.org é um serviço público de testes. Use apenas dados fictícios como "Ana" ou "teste@exemplo.com". Nunca digite dados reais.
+      </div>
+
+      <h3>🎯 Como saber se passou em todos os testes</h3>
+      <table class="tabela-estudo">
+        <thead>
+          <tr><th>Teste</th><th>Resultado esperado</th><th>Se falhar, verifique</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CSS carregando</td><td>Fundo claro, fonte sem serifa</td><td><code>&lt;link&gt;</code> no <code>head</code> e nome do arquivo</td></tr>
+          <tr><td>Navegação Postagens</td><td>Rola até o bloco de postagens</td><td><code>id="postagens"</code> no <code>h2</code> certo</td></tr>
+          <tr><td>Navegação Agenda / Contato</td><td>Rola até cada bloco</td><td><code>id</code> de cada <code>h2</code></td></tr>
+          <tr><td>Menu como barra</td><td>Links em linha, sem <code>|</code> visível</td><td>Etapa 8 — <code>display: flex</code> + <code>gap</code></td></tr>
+          <tr><td>Formulário como cartão</td><td>Bloco branco com sombra</td><td>Seletor <code>form</code> no CSS</td></tr>
+          <tr><td>Envio do formulário</td><td>JSON do httpbin</td><td><code>action</code> e <code>method</code> no <code>&lt;form&gt;</code></td></tr>
+          <tr><td>Sem CSS inline</td><td>Nenhum <code>style=</code></td><td>Mover tudo para <code>estilo.css</code></td></tr>
+          <tr><td>Sem JavaScript</td><td>Nenhum <code>&lt;script&gt;</code></td><td>Remover scripts</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <footer style="text-align:center;color:#94a3b8;font-size:.78rem;padding:22px 0;">
+    🎨 Programação Front-End • Atividade Prática: Blog da Turma (HTML + CSS externo) • 2026
+  </footer>
+</div>
+
+<button type="button" class="btn-top" id="btn-topo">⬆️ Topo</button>
+<div class="toast-export" id="toast-export">✅ Progresso exportado!</div>
+
+<script>
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function esc(t){
+  return String(t == null ? '' : t)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function $(id){ return document.getElementById(id); }
+
+/* ============================================================
+   HTML BASE (o mesmo para todas as prévias)
+   ============================================================ */
+var HTML_BASE =
+'<!DOCTYPE html>\n' +
+'<html lang="pt-BR">\n' +
+'<head>\n' +
+'  <meta charset="UTF-8">\n' +
+'  <title>Blog da Turma</title>\n' +
+'</head>\n' +
+'<body>\n' +
+'\n' +
+'  <h1>Blog da Turma</h1>\n' +
+'  <p>Notícias, projetos e ideias dos estudantes.</p>\n' +
+'\n' +
+'  <nav>\n' +
+'    <a href="#postagens">Postagens</a> |\n' +
+'    <a href="#agenda">Agenda</a> |\n' +
+'    <a href="#contato">Contato</a>\n' +
+'  </nav>\n' +
+'\n' +
+'  <hr>\n' +
+'\n' +
+'  <h2 id="postagens">Postagens recentes</h2>\n' +
+'\n' +
+'  <h3>Feira de ciências</h3>\n' +
+'  <p>A feira acontece na próxima quinta-feira, no pátio da escola.</p>\n' +
+'\n' +
+'  <h3>Clube de leitura</h3>\n' +
+'  <p>Os encontros são às quartas-feiras, na biblioteca.</p>\n' +
+'\n' +
+'  <h3>Projeto de robótica</h3>\n' +
+'  <p>A equipe está montando um robô para a competição regional.</p>\n' +
+'\n' +
+'  <hr>\n' +
+'\n' +
+'  <h2 id="agenda">Agenda</h2>\n' +
+'  <table border="1">\n' +
+'    <tr>\n' +
+'      <th>Data</th>\n' +
+'      <th>Evento</th>\n' +
+'      <th>Local</th>\n' +
+'    </tr>\n' +
+'    <tr>\n' +
+'      <td>10/05</td>\n' +
+'      <td>Feira de ciências</td>\n' +
+'      <td>Pátio</td>\n' +
+'    </tr>\n' +
+'    <tr>\n' +
+'      <td>18/05</td>\n' +
+'      <td>Clube de leitura</td>\n' +
+'      <td>Biblioteca</td>\n' +
+'    </tr>\n' +
+'  </table>\n' +
+'\n' +
+'  <hr>\n' +
+'\n' +
+'  <h2 id="contato">Contato</h2>\n' +
+'  <form action="https://httpbin.org/post" method="post">\n' +
+'    <label for="nome">Seu nome:</label>\n' +
+'    <input type="text" id="nome" name="nome" required>\n' +
+'\n' +
+'    <br><br>\n' +
+'\n' +
+'    <label for="assunto">Assunto:</label>\n' +
+'    <select id="assunto" name="assunto">\n' +
+'      <option>Sugestão</option>\n' +
+'      <option>Dúvida</option>\n' +
+'      <option>Elogio</option>\n' +
+'    </select>\n' +
+'\n' +
+'    <br><br>\n' +
+'\n' +
+'    <button type="submit">Enviar mensagem</button>\n' +
+'  </form>\n' +
+'\n' +
+'</body>\n' +
+'</html>\n';
+
+/* ============================================================
+   CSS DAS ETAPAS — usados apenas nas prévias internas.
+   O aluno NÃO vê este CSS; vê só a legenda e o iframe.
+   ============================================================ */
+var CSS_ETAPA_4 =
+  'body {\n' +
+  '  background-color: #f8f5f0;\n' +
+  '  font-family: Arial, sans-serif;\n' +
+  '  color: #1f2937;\n' +
+  '  padding: 24px;\n' +
+  '  line-height: 1.6;\n' +
+  '}\n';
+
+var CSS_ETAPA_5 = CSS_ETAPA_4 +
+  'h1 { color: #0d9488; text-align: center; }\n' +
+  'nav { background-color: #0f172a; padding: 12px 16px; }\n' +
+  'nav a { color: #ffffff; text-decoration: none; }\n';
+
+var CSS_ETAPA_6 = CSS_ETAPA_5 +
+  'p { margin-bottom: 14px; }\n' +
+  'hr { border: 0; border-top: 1px solid #d6cdbf; margin: 18px 0; }\n' +
+  'table { border-collapse: collapse; background: #ffffff; }\n' +
+  'th, td { padding: 8px 12px; text-align: left; border: 1px solid #94a3b8; }\n' +
+  'th { background-color: #0d9488; color: #ffffff; }\n';
+
+var CSS_ETAPA_7 = CSS_ETAPA_6 +
+  'form {\n' +
+  '  background: #ffffff;\n' +
+  '  border: 1px solid #e2e8f0;\n' +
+  '  border-radius: 12px;\n' +
+  '  padding: 20px;\n' +
+  '  max-width: 420px;\n' +
+  '  margin: 20px auto;\n' +
+  '  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);\n' +
+  '}\n';
+
+var CSS_ETAPA_8 = CSS_ETAPA_7 +
+  'nav { display: flex; gap: 16px; align-items: center; }\n' +
+  'nav { font-size: 0.95rem; }\n' +
+  'button {\n' +
+  '  background-color: #0d9488;\n' +
+  '  color: #ffffff;\n' +
+  '  border: 0;\n' +
+  '  border-radius: 8px;\n' +
+  '  padding: 10px 18px;\n' +
+  '  font-weight: 700;\n' +
+  '  cursor: pointer;\n' +
+  '}\n';
+
+var CSS_ETAPA_9 = CSS_ETAPA_8 +
+  'nav { box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2); }\n' +
+  'h2 { color: #0f766e; margin-top: 26px; }\n';
+
+var CSS_POR_ETAPA = {
+  etapa1: '',
+  etapa2: '',
+  etapa3: '',
+  css1: CSS_ETAPA_4,
+  css2: CSS_ETAPA_5,
+  css3: CSS_ETAPA_6,
+  css4: CSS_ETAPA_7,
+  css5: CSS_ETAPA_8,
+  css6: CSS_ETAPA_9
+};
+
+/* ============================================================
+   REQUISITOS DE VALIDAÇÃO
+   ============================================================ */
+var REQUISITOS = {
+  base: [
+    { id:'base-1', texto:'Dois arquivos na mesma pasta: <code>index.html</code> e <code>estilo.css</code>', detalhe:'Nome exato, sem variações.' },
+    { id:'base-2', texto:'<code>&lt;!DOCTYPE html&gt;</code> na primeira linha', detalhe:'Padrão HTML5.' },
+    { id:'base-3', texto:'<code>&lt;html lang="pt-BR"&gt;</code>', detalhe:'Idioma pt-BR.' },
+    { id:'base-4', texto:'<code>&lt;meta charset="UTF-8"&gt;</code> no <code>&lt;head&gt;</code>', detalhe:'Garante acentos corretos.' },
+    { id:'base-5', texto:'<code>&lt;title&gt;Blog da Turma&lt;/title&gt;</code>', detalhe:'Texto exato.' },
+    { id:'base-6', texto:'<code>&lt;link rel="stylesheet" href="estilo.css"&gt;</code> no <code>&lt;head&gt;</code>', detalhe:'Liga o HTML ao CSS externo.' }
+  ],
+  conteudo: [
+    { id:'cont-1', texto:'<code>&lt;h1&gt;Blog da Turma&lt;/h1&gt;</code> no início do body', detalhe:'Um único h1.' },
+    { id:'cont-2', texto:'<code>&lt;p&gt;</code> com o subtítulo exato abaixo do h1', detalhe:'"Notícias, projetos e ideias dos estudantes."' },
+    { id:'cont-3', texto:'<code>&lt;nav&gt;</code> com três <code>&lt;a&gt;</code> separados por <code>|</code>', detalhe:'Postagens, Agenda, Contato.' },
+    { id:'cont-4', texto:'Links apontam para <code>#postagens</code>, <code>#agenda</code>, <code>#contato</code>', detalhe:'Sem acento nos hrefs.' },
+    { id:'cont-5', texto:'<code>&lt;h2 id="postagens"&gt;</code> antes das três postagens', detalhe:'Id correto.' },
+    { id:'cont-6', texto:'Três <code>&lt;h3&gt;</code> + um <code>&lt;p&gt;</code> cada, com os textos exatos', detalhe:'Feira, Clube de leitura, Robótica.' }
+  ],
+  form: [
+    { id:'form-1', texto:'<code>&lt;h2 id="agenda"&gt;</code> antes da tabela', detalhe:'Id correto.' },
+    { id:'form-2', texto:'<code>&lt;table border="1"&gt;</code> com cabeçalho e duas linhas de dados', detalhe:'Cada linha com sua própria <code>&lt;tr&gt;</code>.' },
+    { id:'form-3', texto:'Cabeçalho com três <code>&lt;th&gt;</code>: Data, Evento, Local', detalhe:'Mesma ordem.' },
+    { id:'form-4', texto:'Duas linhas de dados com três <code>&lt;td&gt;</code> cada', detalhe:'10/05 e 18/05.' },
+    { id:'form-5', texto:'<code>&lt;h2 id="contato"&gt;</code> antes do formulário', detalhe:'Id correto.' },
+    { id:'form-6', texto:'<code>&lt;form action="https://httpbin.org/post" method="post"&gt;</code>', detalhe:'Action e method exatos.' },
+    { id:'form-7', texto:'<code>label for="nome"</code> + <code>input type="text" id="nome" name="nome" required</code>', detalhe:'Par id/for correto.' },
+    { id:'form-8', texto:'<code>label for="assunto"</code> + <code>select id="assunto" name="assunto"</code> com três <code>&lt;option&gt;</code>', detalhe:'Sugestão, Dúvida, Elogio. Sem value.' },
+    { id:'form-9', texto:'<code>&lt;button type="submit"&gt;Enviar mensagem&lt;/button&gt;</code>', detalhe:'Texto exato.' },
+    { id:'form-10', texto:'Dois pares de <code>&lt;br&gt;&lt;br&gt;</code> separando os campos', detalhe:'Um após o input, outro após o select.' }
+  ],
+  css1: [
+    { id:'css1-1', texto:'CSS aplica fundo claro no <code>body</code>', detalhe:'Ex.: background-color.' },
+    { id:'css1-2', texto:'CSS muda a família de fonte do <code>body</code> para sem serifa', detalhe:'Ex.: font-family: Arial, sans-serif.' },
+    { id:'css1-3', texto:'CSS define cor de texto escura no <code>body</code>', detalhe:'Ex.: color.' },
+    { id:'css1-4', texto:'CSS adiciona espaço interno no <code>body</code>', detalhe:'Ex.: padding.' },
+    { id:'css1-5', texto:'<code>h1</code> com cor de destaque e centralizado', detalhe:'Ex.: color + text-align: center.' },
+    { id:'css1-6', texto:'<code>nav</code> com fundo escuro', detalhe:'Ex.: background-color.' },
+    { id:'css1-7', texto:'Links do <code>nav</code> sem sublinhado e em cor clara', detalhe:'Ex.: text-decoration: none; color.' }
+  ],
+  css2: [
+    { id:'css2-1', texto:'Parágrafos com margem inferior', detalhe:'Ex.: margin-bottom em p.' },
+    { id:'css2-2', texto:'<code>&lt;hr&gt;</code> com linha suave', detalhe:'Ex.: border-top em vez da borda padrão.' },
+    { id:'css2-3', texto:'<code>th</code> com fundo colorido', detalhe:'Ex.: background-color.' },
+    { id:'css2-4', texto:'Células com espaço interno e alinhamento à esquerda', detalhe:'Ex.: padding e text-align em th, td.' },
+    { id:'css2-5', texto:'<code>form</code> com fundo, borda, cantos arredondados e sombra', detalhe:'Ex.: background, border, border-radius, box-shadow.' },
+    { id:'css2-6', texto:'<code>form</code> com largura máxima e centralizado', detalhe:'Ex.: max-width + margin auto.' },
+    { id:'css2-7', texto:'Menu em linha com espaço entre os links', detalhe:'Ex.: display: flex + gap no nav.' },
+    { id:'css2-8', texto:'<code>button</code> com fundo colorido, texto claro, cantos arredondados e sem borda padrão', detalhe:'Ex.: background-color, color, border-radius, border: 0.' },
+    { id:'css2-9', texto:'<code>nav</code> com sombra suave', detalhe:'Ex.: box-shadow.' }
+  ]
+};
+
+/* ============================================================
+   ESTADO — persistido no localStorage
+   ============================================================ */
+var STORAGE_KEY = 'blog-da-turma-aluno-v1';
+var state = {
+  checklist: {}
+};
+
+function carregarEstado(){
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    var p = JSON.parse(raw);
+    if (p && typeof p === 'object' && p.checklist && typeof p.checklist === 'object'){
+      state.checklist = p.checklist;
+    }
+  } catch(e){}
+}
+function salvarEstado(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+
+/* ============================================================
+   PRÉVIAS
+   ============================================================ */
+function montarDoc(css){
+  return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">' +
+         '<style>' + (css || '') + '</style></head><body>' +
+         HTML_BASE.replace(/^[\s\S]*?<body>/, '').replace(/<\/body>[\s\S]*$/, '') +
+         '</body></html>';
+}
+
+function renderizarPreviasEtapas(){
+  document.querySelectorAll('iframe[data-preview]').forEach(function(iframe){
+    var chave = iframe.getAttribute('data-preview');
+    var css = CSS_POR_ETAPA[chave] || '';
+    iframe.srcdoc = montarDoc(css);
+    iframe.addEventListener('load', function(){
+      try {
+        var doc = iframe.contentDocument || iframe.contentWindow.document;
+        var alt = Math.min(1000, Math.max(140, doc.body.scrollHeight + 20));
+        iframe.style.height = alt + 'px';
+      } catch(e){ iframe.style.height = '480px'; }
+    });
+  });
+}
+
+function renderizarFrameResultado(){
+  var iframe = $('iframe-resultado');
+  if (!iframe) return;
+  iframe.srcdoc = montarDoc(CSS_ETAPA_9);
+}
+
+/* ============================================================
+   VALIDAÇÃO
+   ============================================================ */
+function renderizarValidacao(){
+  Object.keys(REQUISITOS).forEach(function(grupo){
+    var container = $('lista-validacao-' + grupo);
+    if (!container) return;
+    var html = '';
+    REQUISITOS[grupo].forEach(function(req){
+      var marcado = !!state.checklist[req.id];
+      html += '<div class="validacao-item ' + (marcado ? 'concluido' : '') + '" data-req="' + esc(req.id) + '">' +
+                '<div class="check-box"></div>' +
+                '<div class="info">' +
+                  '<strong>' + req.texto + '</strong>' +
+                  '<p>' + req.detalhe + '</p>' +
+                '</div>' +
+              '</div>';
+    });
+    container.innerHTML = html;
+  });
+
+  document.querySelectorAll('.validacao-item').forEach(function(item){
+    item.addEventListener('click', function(){
+      var id = item.getAttribute('data-req');
+      item.classList.toggle('concluido');
+      if (item.classList.contains('concluido')) state.checklist[id] = true;
+      else delete state.checklist[id];
+      salvarEstado();
+      atualizarProgressoValidacao();
+    });
+  });
+
+  atualizarProgressoValidacao();
+}
+
+function totalRequisitos(){
+  return Object.keys(REQUISITOS).reduce(function(acc, k){ return acc + REQUISITOS[k].length; }, 0);
+}
+
+function feitosRequisitos(){
+  return Object.keys(REQUISITOS).reduce(function(acc, k){
+    return acc + REQUISITOS[k].filter(function(r){ return !!state.checklist[r.id]; }).length;
+  }, 0);
+}
+
+function atualizarProgressoValidacao(){
+  var total = totalRequisitos();
+  var feitos = feitosRequisitos();
+  var cont = $('validacao-contador');
+  var barra = $('validacao-barra');
+  if (cont) cont.textContent = feitos + ' de ' + total + ' requisitos verificados';
+  if (barra) barra.style.width = ((feitos / total) * 100) + '%';
+}
+
+/* ============================================================
+   EXPORTAR PROGRESSO DO ALUNO
+   ============================================================ */
+function exportarChecklist(){
+  var payload = {
+    tipo: 'checklist-aluno-blog-da-turma',
+    versao: 1,
+    exportadoEm: new Date().toISOString(),
+    totalRequisitos: totalRequisitos(),
+    feitosRequisitos: feitosRequisitos(),
+    checklist: state.checklist
+  };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'meu-progresso-blog-da-turma-' + new Date().toISOString().slice(0,10) + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+
+  // toast
+  var t = $('toast-export');
+  if (t){
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+}
+
+function limparChecklist(){
+  if (!confirm('Apagar todas as marcações do checklist? Essa ação não pode ser desfeita.')) return;
+  state.checklist = {};
+  salvarEstado();
+  document.querySelectorAll('.validacao-item').forEach(function(item){
+    item.classList.remove('concluido');
+  });
+  atualizarProgressoValidacao();
+}
+
+/* ============================================================
+   ABAS
+   ============================================================ */
+function trocarAba(idAba, botao){
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
+  botao.classList.add('active');
+  var alvo = $(idAba);
+  if (alvo) alvo.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', function(){
+  carregarEstado();
+
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){ trocarAba(btn.dataset.aba, btn); });
+  });
+
+  renderizarPreviasEtapas();
+  renderizarFrameResultado();
+  renderizarValidacao();
+
+  var btnRecriar = $('btn-recriar-frame');
+  if (btnRecriar) btnRecriar.addEventListener('click', renderizarFrameResultado);
+
+  var btnTopo = $('btn-topo');
+  if (btnTopo) btnTopo.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+
+  var btnExportar = $('btn-exportar');
+  if (btnExportar) btnExportar.addEventListener('click', exportarChecklist);
+
+  var btnLimpar = $('btn-limpar-checklist');
+  if (btnLimpar) btnLimpar.addEventListener('click', limparChecklist);
+});
+</script>
+</body>
+</html>

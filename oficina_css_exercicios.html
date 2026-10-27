@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oficina CSS — Pratique, avalie e compare</title>
+<style>
+:root{--ink:#172033;--muted:#64748b;--line:#dbe2ea;--bg:#f4f7fb;--card:#fff;--brand:#4f46e5;--brand2:#3730a3;--green:#15803d;--amber:#b45309;--danger:#dc2626}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:#172554;color:white;padding:26px max(20px,calc((100% - 1240px)/2));}
+header h1{margin:0 0 5px;font-size:clamp(1.5rem,3vw,2.2rem)}
+header p{margin:0;color:#dbeafe;max-width:850px}
+main{max-width:1240px;margin:22px auto;padding:0 18px 40px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 4px 16px #0f172a08}
+.topline{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+select,button,textarea{font:inherit}
+select{padding:10px 12px;border:1px solid #cbd5e1;border-radius:9px;background:white;max-width:100%}
+button{border:0;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700;background:var(--brand);color:white}
+button:hover{background:var(--brand2)}
+button.secondary{background:#e2e8f0;color:#172033}
+button.secondary:hover{background:#cbd5e1}
+button.green{background:#15803d}
+button.green:hover{background:#166534}
+button.danger{background:#fee2e2;color:#991b1b}
+button.danger:hover{background:#fecaca}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #a5b4fc;outline-offset:2px}
+.progress-wrap{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:12px;display:flex}
+.progress-seg{height:100%;transition:width .2s}
+.progress-seg.done{background:#15803d}
+.progress-seg.doing{background:#f59e0b}
+.pill{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:99px;padding:3px 10px;font-size:.82rem;font-weight:800}
+.pill.state-doing{background:#fef3c7;color:#92400e}
+.pill.state-done{background:#dcfce7;color:#166534}
+h2{font-size:1.25rem;margin:0 0 8px}
+.muted{color:var(--muted)}
+.task{background:#f8fafc;border-left:4px solid var(--brand);padding:12px 14px;border-radius:8px;margin-top:12px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.code{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px;white-space:pre-wrap;overflow:auto;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;min-height:150px}
+textarea{width:100%;min-height:220px;resize:vertical;background:#0b1220;color:#d1fae5;border:1px solid #334155;border-radius:10px;padding:14px;font:14px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+.preview{background:white;border:1px solid #cbd5e1;border-radius:10px;overflow:hidden;min-height:200px}
+.preview iframe{width:100%;height:260px;border:0;display:block;background:white}
+.preview-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:#64748b;font-weight:800;padding:9px 12px;background:#f8fafc;border-bottom:1px solid #e2e8f0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.note{font-size:.9rem;color:var(--muted)}
+.feedback{padding:12px;border-radius:9px;margin-top:12px;display:none}
+.feedback.show{display:block}
+.feedback.good{background:#dcfce7;color:#166534}
+.feedback.info{background:#fef3c7;color:#92400e}
+.feedback.bad{background:#fee2e2;color:#991b1b}
+details{margin-top:12px}
+summary{cursor:pointer;font-weight:800;color:#3730a3}
+.solution{margin-top:10px}
+.criteria{list-style:none;padding:0;margin:10px 0 0;font-size:.9rem}
+.criteria li{padding:6px 0;display:flex;align-items:flex-start;gap:8px;border-bottom:1px dashed #e2e8f0}
+.criteria li:last-child{border-bottom:0}
+.criteria li .mark{font-weight:900;width:18px;text-align:center;flex-shrink:0}
+.criteria li.pass .mark{color:var(--green)}
+.criteria li.fail .mark{color:var(--danger)}
+.criteria li .detail{color:var(--muted);font-size:.8rem;display:block;margin-top:2px}
+footer{text-align:center;color:#64748b;padding:10px 20px 28px;font-size:.9rem}
+@media(max-width:780px){.columns{grid-template-columns:1fr}.preview iframe{height:230px}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎨 Oficina CSS: pratique, avalie e compare</h1>
+  <p>Você recebe um HTML pronto. Sua missão é escrever CSS para transformar a página. O sistema avalia critérios mínimos, mostra o que já foi atendido e o que falta ajustar — sem exigir cópia exata da solução.</p>
+</header>
+<main>
+  <section class="panel">
+    <div class="topline">
+      <div>
+        <span class="pill">ATIVIDADE PRÁTICA</span>
+        <h2 style="margin-top:8px">Escolha um exercício</h2>
+        <div class="muted">Cada atividade apresenta apenas alguns conceitos novos.</div>
+      </div>
+      <div class="actions" style="margin-top:0">
+        <select id="exerciseSelect" aria-label="Selecionar exercício"></select>
+        <button class="secondary" id="exportBtn" title="Baixar progresso em JSON">⬇ Exportar</button>
+        <button class="secondary" id="importBtn" title="Carregar progresso de um JSON">⬆ Importar</button>
+        <input type="file" id="importFile" accept="application/json" hidden>
+        <button class="danger" id="resetAllBtn" title="Apaga progresso e rascunhos salvos">🗑 Zerar</button>
+      </div>
+    </div>
+    <div class="progress-wrap" aria-hidden="true">
+      <div class="progress-seg done" id="progressDone"></div>
+      <div class="progress-seg doing" id="progressDoing"></div>
+    </div>
+    <p id="progressText" class="note">0 de 8 concluídos • 0 em andamento</p>
+  </section>
+
+  <section class="panel">
+    <div class="topline">
+      <div>
+        <span id="level" class="pill">NÍVEL 1</span>
+        <span id="stateBadge" class="pill">NÃO INICIADO</span>
+        <h2 id="title" style="margin-top:8px"></h2>
+      </div>
+      <div class="actions" style="margin-top:0">
+        <button class="secondary" id="prevBtn">← Anterior</button>
+        <button id="nextBtn">Próximo →</button>
+      </div>
+    </div>
+    <p id="description"></p>
+    <div class="task"><strong>🎯 Sua missão</strong><div id="task" style="margin-top:4px"></div></div>
+    <p class="note" id="tip"></p>
+  </section>
+
+  <section class="panel">
+    <h2>1. Código HTML fornecido</h2>
+    <p class="muted">O HTML já está pronto. Não precisa alterá-lo: concentre-se no CSS.</p>
+    <pre class="code" id="htmlCode"></pre>
+  </section>
+
+  <section class="panel">
+    <h2>2. Escreva seu CSS</h2>
+    <p class="muted">A prévia atualiza enquanto você digita. Clique em <strong>Executar e avaliar</strong> para ver a verificação dos critérios.</p>
+    <textarea id="cssEditor" spellcheck="false" aria-label="Editor de CSS" placeholder="/* Escreva suas regras CSS aqui */"></textarea>
+    <div class="actions">
+      <button id="runBtn">▶ Executar e avaliar</button>
+      <button class="secondary" id="resetBtn">Limpar CSS</button>
+      <button class="secondary" id="hintBtn">💡 Dica</button>
+      <button class="green" id="doneBtn">✓ Marcar como concluído</button>
+    </div>
+    <div id="feedback" class="feedback" role="status"></div>
+    <div id="hint" class="feedback info"></div>
+    <ul id="criteriaList" class="criteria" aria-live="polite"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>3. Compare os resultados</h2>
+    <div class="columns" style="margin-top:12px">
+      <div class="preview">
+        <div class="preview-label">Sua tentativa</div>
+        <iframe id="studentPreview" title="Prévia do CSS escrito pelo estudante" sandbox=""></iframe>
+      </div>
+      <div class="preview">
+        <div class="preview-label">Resultado esperado</div>
+        <iframe id="targetPreview" title="Exemplo de resultado esperado" sandbox=""></iframe>
+      </div>
+    </div>
+    <p class="note">O objetivo é aproximar a aparência e compreender quais propriedades produzem cada mudança. Soluções diferentes da mostrada podem ser válidas, desde que atendam aos critérios.</p>
+    <details>
+      <summary>Ver uma solução possível</summary>
+      <pre class="code solution" id="solutionCode"></pre>
+      <button id="useSolutionBtn" style="margin-top:10px">Usar esta solução no editor</button>
+    </details>
+  </section>
+</main>
+<footer>Oficina introdutória de CSS • Arquivo único, funciona localmente no navegador • Avaliação por critérios, tolerante a variações sintáticas</footer>
+<script>
+/* ============================================================
+   PARSER CSS MÍNIMO
+   - remove comentários
+   - separa blocos seletor { declarações }
+   - normaliza declarações em {prop, value}
+   - expande shorthands comuns
+   - normaliza cores
+   ============================================================ */
+function removerComentarios(css) {
+  return css.replace(/\/\*[\s\S]*?\*\//g, '');
+}
+
+function parseCss(css) {
+  const limpo = removerComentarios(css);
+  const regras = [];
+  // captura "seletor { ... }" (não lida com @media aninhado; suficiente para a oficina)
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let m;
+  while ((m = re.exec(limpo)) !== null) {
+    const seletorBruto = m[1].trim();
+    const declaracoesBrutas = m[2];
+    if (!seletorBruto) continue;
+    const seletores = seletorBruto.split(',').map(s => s.trim()).filter(Boolean);
+    const decls = [];
+    declaracoesBrutas.split(';').forEach(d => {
+      const idx = d.indexOf(':');
+      if (idx === -1) return;
+      const prop = d.slice(0, idx).trim().toLowerCase();
+      const value = d.slice(idx + 1).trim();
+      if (!prop || !value) return;
+      decls.push({ prop, value });
+    });
+    regras.push({ seletores, decls, raw: seletorBruto });
+  }
+  return regras;
+}
+
+/* normaliza cor para um token semântico simples */
+function normalizarCor(v) {
+  if (!v) return null;
+  const s = v.trim().toLowerCase().replace(/\s+/g, '');
+  const mapa = {
+    'blue': '#0000ff', '#00f': '#0000ff', '#0000ff': '#0000ff',
+    'white': '#ffffff', '#fff': '#ffffff', '#ffffff': '#ffffff',
+    'black': '#000000', '#000': '#000000', '#000000': '#000000',
+    'red': '#ff0000', '#f00': '#ff0000', '#ff0000': '#ff0000',
+    'green': '#008000', '#008000': '#008000',
+    'gray': '#808080', 'grey': '#808080', '#808080': '#808080',
+    'yellow': '#ffff00', '#ff0': '#ffff00', '#ffff00': '#ffff00'
+  };
+  if (mapa[s]) return mapa[s];
+  const rgb = s.match(/^rgb\((\d+),(\d+),(\d+)\)$/);
+  if (rgb) {
+    const hex = '#' + [rgb[1], rgb[2], rgb[3]].map(n => Number(n).toString(16).padStart(2, '0')).join('');
+    return hex;
+  }
+  return s;
+}
+
+function corPareceAzul(v) {
+  const c = normalizarCor(v);
+  if (!c) return false;
+  // azuis aceitos: tons de azul claros/escuros comuns
+  const azuis = ['#2563eb','#0000ff','#1d4ed8','#3b82f6','#60a5fa','#1e40af','#3730a3','#4338ca','#4f46e5','#0ea5e9','#0284c7','#0369a1','#1e3a8a','#1e293b'];
+  if (azuis.includes(c)) return true;
+  // qualquer cor com canal azul dominante e não-acinzentada
+  if (c.startsWith('#') && c.length === 7) {
+    const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+    return b > 120 && b > r + 30 && b > g + 30;
+  }
+  return false;
+}
+
+function corPareceEscura(v) {
+  const c = normalizarCor(v);
+  if (!c || !c.startsWith('#') || c.length !== 7) return false;
+  const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+  const lum = (0.299*r + 0.587*g + 0.114*b);
+  return lum < 140;
+}
+
+function corPareceClara(v) {
+  const c = normalizarCor(v);
+  if (!c || !c.startsWith('#') || c.length !== 7) return false;
+  const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+  const lum = (0.299*r + 0.587*g + 0.114*b);
+  return lum > 180;
+}
+
+/* expande shorthands para consulta facilitada */
+function expandirDeclaracoes(decls) {
+  const out = {};
+  for (const { prop, value } of decls) {
+    const p = prop;
+    if (p === 'margin' || p === 'padding') {
+      const partes = value.split(/\s+/);
+      const lados = ['top','right','bottom','left'];
+      if (partes.length === 1) lados.forEach(l => out[p + '-' + l] = partes[0]);
+      else if (partes.length === 2) { out[p+'-top']=partes[0];out[p+'-bottom']=partes[0];out[p+'-right']=partes[1];out[p+'-left']=partes[1]; }
+      else if (partes.length === 3) { out[p+'-top']=partes[0];out[p+'-right']=partes[1];out[p+'-left']=partes[1];out[p+'-bottom']=partes[2]; }
+      else if (partes.length === 4) { out[p+'-top']=partes[0];out[p+'-right']=partes[1];out[p+'-bottom']=partes[2];out[p+'-left']=partes[3]; }
+      out[p] = value;
+    } else if (p === 'border') {
+      // border: 2px solid blue
+      out['border'] = value;
+      const partes = value.split(/\s+/);
+      partes.forEach(parte => {
+        if (/^\d/.test(parte)) out['border-width'] = parte;
+        else if (/solid|dashed|dotted|double|none/i.test(parte)) out['border-style'] = parte;
+        else out['border-color'] = parte;
+      });
+    } else if (p === 'background') {
+      out['background'] = value;
+      out['background-color'] = value;
+    } else if (p === 'font') {
+      out['font'] = value;
+    } else if (p === 'list-style') {
+      out['list-style'] = value;
+      if (/none/i.test(value)) out['list-style-type'] = 'none';
+    } else if (p === 'text-decoration') {
+      out['text-decoration'] = value;
+      out['text-decoration-line'] = value;
+    } else {
+      out[p] = value;
+    }
+  }
+  return out;
+}
+
+/* localiza regra por seletor (com normalização) */
+function acharRegras(regras, seletorAlvo) {
+  const alvo = seletorAlvo.trim().toLowerCase().replace(/\s+/g, ' ');
+  return regras.filter(r => r.seletores.some(s => s.toLowerCase().replace(/\s+/g, ' ') === alvo));
+}
+
+function obterDeclaracao(regra, prop) {
+  const expansao = expandirDeclaracoes(regra.decls);
+  return expansao[prop] || null;
+}
+
+function obterTodasDeclaracoes(regras, seletorAlvo) {
+  const encontradas = acharRegras(regras, seletorAlvo);
+  const merged = {};
+  encontradas.forEach(r => {
+    const exp = expandirDeclaracoes(r.decls);
+    Object.assign(merged, exp);
+  });
+  return merged;
+}
+
+function seletorContem(regra, fragmento) {
+  return regra.seletores.some(s => s.toLowerCase().includes(fragmento.toLowerCase()));
+}
+
+/* ============================================================
+   EXERCÍCIOS
+   ============================================================ */
+const exercises = [
+{
+ title:"Cores e texto", level:1,
+ description:"Vamos começar com duas mudanças visíveis: a cor do título e a cor do texto.",
+ task:"Deixe o título azul e o parágrafo cinza-escuro.",
+ tip:"Uma regra CSS tem seletor e declarações: h1 { color: blue; }",
+ html:`<main>\n  <h1>Minha primeira página</h1>\n  <p>Estou aprendendo a aplicar estilos com CSS.</p>\n</main>`,
+ solution:`h1 {\n  color: #2563eb;\n}\n\np {\n  color: #334155;\n}`,
+ hint:"Experimente a propriedade color. Para selecionar o título, use h1; para o parágrafo, use p.",
+ css:`main { font-family: Arial, sans-serif; padding: 18px; }\nh1 { color: #2563eb; }\np { color: #334155; }`,
+ checks:[
+   {label:"h1 tem cor azul", test:regras => {
+     const r = acharRegras(regras, 'h1');
+     return r.length > 0 && r.some(reg => corPareceAzul(obterDeclaracao(reg, 'color')));
+   }, detalhe:"Ex.: color: #2563eb; blue; rgb(37,99,235)"},
+   {label:"p tem cor escura", test:regras => {
+     const r = acharRegras(regras, 'p');
+     return r.length > 0 && r.some(reg => corPareceEscura(obterDeclaracao(reg, 'color')));
+   }, detalhe:"Ex.: color: #334155; #1f2937"}
+ ]
+},
+{
+ title:"Fundo da página", level:1,
+ description:"Agora vamos alterar o fundo e manter o texto fácil de ler.",
+ task:"Coloque um fundo amarelo-claro na página e deixe o texto com uma cor escura.",
+ tip:"A propriedade background-color define a cor de fundo de um elemento.",
+ html:`<h1>Clube de leitura</h1>\n<p>Livros, ideias e novas descobertas.</p>`,
+ solution:`body {\n  background-color: #fef3c7;\n  color: #1f2937;\n  font-family: Arial, sans-serif;\n  padding: 20px;\n}`,
+ hint:"O seletor body representa a área principal da página.",
+ css:`body { background-color: #fef3c7; color: #1f2937; font-family: Arial, sans-serif; padding: 20px; }`,
+ checks:[
+   {label:"body tem fundo claro (amarelado/creme)", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'body');
+     const cor = normalizarCor(d['background-color'] || d['background']);
+     if (!cor) return false;
+     if (cor === '#fef3c7' || cor === '#fef9c3' || cor === '#fffbeb' || cor === '#fefce8') return true;
+     if (cor.startsWith('#') && cor.length === 7) {
+       const r = parseInt(cor.slice(1,3),16), g = parseInt(cor.slice(3,5),16), b = parseInt(cor.slice(5,7),16);
+       return r > 230 && g > 210 && b < 230 && r >= b && g >= b;
+     }
+     return false;
+   }, detalhe:"Ex.: background-color: #fef3c7"},
+   {label:"body tem texto escuro", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'body');
+     return corPareceEscura(d['color']);
+   }, detalhe:"Ex.: color: #1f2937"}
+ ]
+},
+{
+ title:"Tamanho e alinhamento", level:1,
+ description:"As propriedades de texto também controlam tamanho e alinhamento.",
+ task:"Centralize o título e aumente seu tamanho para 32px. Deixe o parágrafo alinhado ao centro.",
+ tip:"Use text-align para alinhamento e font-size para tamanho da letra.",
+ html:`<h1>Feira de Tecnologia</h1>\n<p>Conheça os projetos criados pela turma.</p>`,
+ solution:`body { font-family: Arial, sans-serif; padding: 18px; }\nh1 {\n  text-align: center;\n  font-size: 32px;\n  color: #4338ca;\n}\np { text-align: center; }`,
+ hint:"Você pode criar uma regra para h1 e outra para p.",
+ css:`body { font-family: Arial, sans-serif; padding: 18px; }\nh1 { text-align: center; font-size: 32px; color: #4338ca; }\np { text-align: center; }`,
+ checks:[
+   {label:"h1 centralizado", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'h1');
+     return (d['text-align'] || '').toLowerCase() === 'center';
+   }, detalhe:"Ex.: text-align: center"},
+   {label:"h1 com 32px", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'h1');
+     const fs = (d['font-size'] || '').replace(/\s+/g,'').toLowerCase();
+     return fs === '32px';
+   }, detalhe:"Ex.: font-size: 32px"},
+   {label:"p centralizado", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'p');
+     return (d['text-align'] || '').toLowerCase() === 'center';
+   }, detalhe:"Ex.: text-align: center"}
+ ]
+},
+{
+ title:"Espaçamento e borda", level:2,
+ description:"Vamos transformar um parágrafo em um pequeno cartão.",
+ task:"Aplique espaço interno de 16px, uma borda azul de 2px e um fundo azul bem claro ao elemento com classe aviso.",
+ tip:"A classe CSS começa com ponto: .aviso.",
+ html:`<h1>Aviso importante</h1>\n<p class="aviso">A entrega do projeto será na sexta-feira.</p>`,
+ solution:`body { font-family: Arial, sans-serif; padding: 18px; }\n.aviso {\n  padding: 16px;\n  border: 2px solid #2563eb;\n  background-color: #eff6ff;\n}`,
+ hint:"Como o HTML usa class=\"aviso\", o seletor correto é .aviso.",
+ css:`body { font-family: Arial, sans-serif; padding: 18px; }\n.aviso { padding: 16px; border: 2px solid #2563eb; background-color: #eff6ff; }`,
+ checks:[
+   {label:".aviso tem padding 16px (todos os lados)", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.aviso');
+     return ['top','right','bottom','left'].every(l => (d['padding-'+l] || '').replace(/\s+/g,'').toLowerCase() === '16px');
+   }, detalhe:"Ex.: padding: 16px"},
+   {label:".aviso tem borda azul de 2px", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.aviso');
+     if (!d['border']) return false;
+     const w = (d['border-width'] || '').replace(/\s+/g,'').toLowerCase();
+     return w === '2px' && corPareceAzul(d['border-color']);
+   }, detalhe:"Ex.: border: 2px solid #2563eb"},
+   {label:".aviso tem fundo azul claro", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.aviso');
+     const cor = normalizarCor(d['background-color'] || d['background']);
+     if (!cor || !cor.startsWith('#') || cor.length !== 7) return false;
+     const r = parseInt(cor.slice(1,3),16), g = parseInt(cor.slice(3,5),16), b = parseInt(cor.slice(5,7),16);
+     return b > 220 && r > 200 && g > 220;
+   }, detalhe:"Ex.: background-color: #eff6ff"}
+ ]
+},
+{
+ title:"Links de navegação", level:2,
+ description:"Uma lista de links pode ser apresentada como uma barra de navegação simples.",
+ task:"Faça os links ficarem lado a lado, retire os marcadores da lista e remova o sublinhado dos links.",
+ tip:"Use display: flex na lista, list-style: none e text-decoration: none nos links.",
+ html:`<nav>\n  <ul>\n    <li><a href="#">Início</a></li>\n    <li><a href="#">Projetos</a></li>\n    <li><a href="#">Contato</a></li>\n  </ul>\n</nav>`,
+ solution:`body { font-family: Arial, sans-serif; padding: 10px; }\nul {\n  display: flex;\n  gap: 20px;\n  list-style: none;\n  padding: 0;\n}\na { color: #4338ca; text-decoration: none; }\na:hover { text-decoration: underline; }`,
+ hint:"Aplique display: flex e gap à ul.",
+ css:`body { font-family: Arial, sans-serif; padding: 10px; }\nul { display: flex; gap: 20px; list-style: none; padding: 0; }\na { color: #4338ca; text-decoration: none; }\na:hover { text-decoration: underline; }`,
+ checks:[
+   {label:"ul é flex", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'ul');
+     return (d['display'] || '').toLowerCase() === 'flex';
+   }, detalhe:"Ex.: display: flex"},
+   {label:"lista sem marcadores", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'ul');
+     return (d['list-style-type'] || d['list-style'] || '').toLowerCase().includes('none');
+   }, detalhe:"Ex.: list-style: none"},
+   {label:"links sem sublinhado", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'a');
+     return (d['text-decoration'] || d['text-decoration-line'] || '').toLowerCase().includes('none');
+   }, detalhe:"Ex.: text-decoration: none"}
+ ]
+},
+{
+ title:"Tabela organizada", level:2,
+ description:"CSS também ajuda a deixar os dados de uma tabela mais fáceis de ler.",
+ task:"Faça a tabela ocupar toda a largura disponível. Adicione bordas às células, fundo azul ao cabeçalho e espaço interno de 8px.",
+ tip:"O seletor th, td pode aplicar a mesma regra às células.",
+ html:`<table>\n  <tr><th>Aluno</th><th>Nota</th></tr>\n  <tr><td>Ana</td><td>9,0</td></tr>\n  <tr><td>Bruno</td><td>8,5</td></tr>\n</table>`,
+ solution:`body { font-family: Arial, sans-serif; padding: 12px; }\ntable { width: 100%; border-collapse: collapse; }\nth, td { border: 1px solid #94a3b8; padding: 8px; text-align: left; }\nth { background-color: #bfdbfe; }`,
+ hint:"Use width: 100% na table e border-collapse: collapse.",
+ css:`body { font-family: Arial, sans-serif; padding: 12px; }\ntable { width: 100%; border-collapse: collapse; }\nth, td { border: 1px solid #94a3b8; padding: 8px; text-align: left; }\nth { background-color: #bfdbfe; }`,
+ checks:[
+   {label:"table com largura 100%", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'table');
+     return (d['width'] || '').replace(/\s+/g,'').toLowerCase() === '100%';
+   }, detalhe:"Ex.: width: 100%"},
+   {label:"células com borda", test:regras => {
+     const th = obterTodasDeclaracoes(regras, 'th');
+     const td = obterTodasDeclaracoes(regras, 'td');
+     const temBordaTh = !!(th['border'] || th['border-width']);
+     const temBordaTd = !!(td['border'] || td['border-width']);
+     return temBordaTh && temBordaTd;
+   }, detalhe:"Ex.: th, td { border: 1px solid #94a3b8; }"},
+   {label:"cabeçalho com fundo azul claro", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'th');
+     const cor = normalizarCor(d['background-color'] || d['background']);
+     if (!cor || !cor.startsWith('#') || cor.length !== 7) return false;
+     const r = parseInt(cor.slice(1,3),16), g = parseInt(cor.slice(3,5),16), b = parseInt(cor.slice(5,7),16);
+     return b > 200 && r > 150 && g > 180;
+   }, detalhe:"Ex.: background-color: #bfdbfe"}
+ ]
+},
+{
+ title:"Formulário simples", level:3,
+ description:"Vamos organizar visualmente um formulário sem alterar sua estrutura HTML.",
+ task:"Coloque o formulário em uma caixa com fundo cinza-claro, espaço interno de 16px e borda arredondada. Faça os campos ocuparem a largura disponível.",
+ tip:"Use padding, background-color, border-radius e width.",
+ html:`<form>\n  <label for="nome">Nome</label>\n  <input id="nome" type="text" placeholder="Seu nome">\n  <label for="email">E-mail</label>\n  <input id="email" type="email" placeholder="seu@email.com">\n  <button type="button">Enviar</button>\n</form>`,
+ solution:`body { font-family: Arial, sans-serif; padding: 12px; }\nform { background: #f1f5f9; padding: 16px; border-radius: 10px; }\nlabel { display: block; margin: 10px 0 4px; }\ninput { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #94a3b8; border-radius: 5px; }\nbutton { padding: 9px 14px; background: #4f46e5; color: white; border: 0; border-radius: 5px; }`,
+ hint:"Um label é exibido em linha por padrão; display: block faz cada rótulo ficar em sua própria linha.",
+ css:`body { font-family: Arial, sans-serif; padding: 12px; }\nform { background: #f1f5f9; padding: 16px; border-radius: 10px; }\nlabel { display: block; margin: 10px 0 4px; }\ninput { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #94a3b8; border-radius: 5px; }\nbutton { padding: 9px 14px; background: #4f46e5; color: white; border: 0; border-radius: 5px; }`,
+ checks:[
+   {label:"form com padding 16px", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'form');
+     return ['top','right','bottom','left'].every(l => (d['padding-'+l] || '').replace(/\s+/g,'').toLowerCase() === '16px');
+   }, detalhe:"Ex.: padding: 16px"},
+   {label:"form com fundo cinza claro", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'form');
+     const cor = normalizarCor(d['background-color'] || d['background']);
+     if (!cor || !cor.startsWith('#') || cor.length !== 7) return false;
+     const r = parseInt(cor.slice(1,3),16), g = parseInt(cor.slice(3,5),16), b = parseInt(cor.slice(5,7),16);
+     return Math.abs(r-g) < 15 && Math.abs(g-b) < 15 && r > 210 && r < 250;
+   }, detalhe:"Ex.: background: #f1f5f9"},
+   {label:"form com cantos arredondados", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'form');
+     return !!d['border-radius'];
+   }, detalhe:"Ex.: border-radius: 10px"},
+   {label:"input com largura 100%", test:regras => {
+     const d = obterTodasDeclaracoes(regras, 'input');
+     return (d['width'] || '').replace(/\s+/g,'').toLowerCase() === '100%';
+   }, detalhe:"Ex.: width: 100%"}
+ ]
+},
+{
+ title:"Cartão de projeto", level:3,
+ description:"No último exercício, combine fundo, espaçamento, borda e largura.",
+ task:"Crie um cartão com largura máxima de 360px, centralizado, com fundo branco, borda cinza, cantos arredondados e sombra suave.",
+ tip:"Use max-width, margin: 20px auto, padding, border-radius e box-shadow.",
+ html:`<article class="card">\n  <h2>Projeto ByteHub</h2>\n  <p>Uma página para divulgar ideias e soluções criadas pelos estudantes.</p>\n  <a href="#">Conhecer projeto</a>\n</article>`,
+ solution:`body { font-family: Arial, sans-serif; background: #f1f5f9; padding: 10px; }\n.card {\n  max-width: 360px;\n  margin: 20px auto;\n  padding: 18px;\n  background: white;\n  border: 1px solid #cbd5e1;\n  border-radius: 12px;\n  box-shadow: 0 4px 12px #0f172a18;\n}\n.card h2 { color: #3730a3; margin-top: 0; }\n.card a { color: #4f46e5; }`,
+ hint:"Para selecionar o cartão, use .card.",
+ css:`body { font-family: Arial, sans-serif; background: #f1f5f9; padding: 10px; }\n.card { max-width: 360px; margin: 20px auto; padding: 18px; background: white; border: 1px solid #cbd5e1; border-radius: 12px; box-shadow: 0 4px 12px #0f172a18; }\n.card h2 { color: #3730a3; margin-top: 0; }\n.card a { color: #4f46e5; }`,
+ checks:[
+   {label:".card com max-width 360px", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.card');
+     return (d['max-width'] || '').replace(/\s+/g,'').toLowerCase() === '360px';
+   }, detalhe:"Ex.: max-width: 360px"},
+   {label:".card centralizado (margin com auto)", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.card');
+     const ml = (d['margin-left'] || '').toLowerCase();
+     const mr = (d['margin-right'] || '').toLowerCase();
+     return ml === 'auto' && mr === 'auto';
+   }, detalhe:"Ex.: margin: 20px auto"},
+   {label:".card com cantos arredondados", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.card');
+     return !!d['border-radius'];
+   }, detalhe:"Ex.: border-radius: 12px"},
+   {label:".card com sombra", test:regras => {
+     const d = obterTodasDeclaracoes(regras, '.card');
+     return !!d['box-shadow'];
+   }, detalhe:"Ex.: box-shadow: 0 4px 12px #0f172a18"}
+ ]
+}
+];
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const STORAGE_KEY = 'oficina-css-v3';
+let state = { current: 0, completed: [], drafts: {} };
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const p = JSON.parse(raw);
+    if (p && typeof p === 'object') {
+      state.current = Number(p.current) || 0;
+      state.completed = Array.isArray(p.completed) ? p.completed.filter(n => Number.isInteger(n)) : [];
+      state.drafts = p.drafts && typeof p.drafts === 'object' ? p.drafts : {};
+    }
+  } catch (e) {}
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $ = id => document.getElementById(id);
+let currentExercise = 0;
+
+function escaparCssParaStyle(css) {
+  return css.replace(/<\s*\/\s*style/gi, '<\\/style');
+}
+function makeDoc(body, css) {
+  const safeCss = escaparCssParaStyle(css);
+  return '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*,*::before,*::after{box-sizing:border-box}html,body{min-height:100%}body{font:16px/1.5 Arial,sans-serif;margin:0;padding:8px;color:#222;}img{max-width:100%;}' + safeCss + '</style></head><body>' + body + '</body></html>';
+}
+
+function avaliarCritérios(css) {
+  const regras = parseCss(css);
+  const ex = exercises[currentExercise];
+  if (!ex.checks) return [];
+  return ex.checks.map(c => {
+    let ok = false;
+    try { ok = !!c.test(regras); } catch (e) { ok = false; }
+    return { label: c.label, detalhe: c.detalhe || '', ok };
+  });
+}
+
+function renderPreview() {
+  const ex = exercises[currentExercise];
+  const css = $('cssEditor').value;
+  $('studentPreview').srcdoc = makeDoc(ex.html, css);
+  $('targetPreview').srcdoc = makeDoc(ex.html, ex.css);
+  renderCriteria(css);
+}
+
+function renderCriteria(css) {
+  const res = avaliarCritérios(css);
+  const list = $('criteriaList');
+  if (!res.length) { list.innerHTML = ''; return; }
+  list.innerHTML = res.map(r =>
+    '<li class="' + (r.ok ? 'pass' : 'fail') + '"><span class="mark">' + (r.ok ? '✓' : '✗') + '</span><span>' + r.label + (r.detalhe ? '<span class="detail">' + r.detalhe + '</span>' : '') + '</span></li>'
+  ).join('');
+}
+
+function estadoDoExercicio(i) {
+  if (state.completed.includes(i)) return 'done';
+  const draft = state.drafts[i] || '';
+  return draft.trim() ? 'doing' : 'todo';
+}
+
+function atualizarBadgeEstado() {
+  const est = estadoDoExercicio(currentExercise);
+  const badge = $('stateBadge');
+  if (est === 'done') { badge.textContent = 'CONCLUÍDO'; badge.className = 'pill state-done'; }
+  else if (est === 'doing') { badge.textContent = 'EM ANDAMENTO'; badge.className = 'pill state-doing'; }
+  else { badge.textContent = 'NÃO INICIADO'; badge.className = 'pill'; }
+}
+
+function atualizarProgresso() {
+  const total = exercises.length;
+  let done = 0, doing = 0;
+  for (let i = 0; i < total; i++) {
+    const e = estadoDoExercicio(i);
+    if (e === 'done') done++;
+    else if (e === 'doing') doing++;
+  }
+  $('progressDone').style.width = (done / total * 100) + '%';
+  $('progressDoing').style.width = (doing / total * 100) + '%';
+  $('progressText').textContent = done + ' de ' + total + ' concluídos • ' + doing + ' em andamento';
+  const isDone = state.completed.includes(currentExercise);
+  $('doneBtn').textContent = isDone ? '↺ Reabrir exercício' : '✓ Marcar como concluído';
+  $('doneBtn').className = isDone ? 'secondary' : 'green';
+}
+
+function showFeedback(msg, type) {
+  const el = $('feedback');
+  el.textContent = msg;
+  el.className = 'feedback show ' + (type || 'info');
+}
+
+function loadExercise(index) {
+  if (exercises[currentExercise]) state.drafts[currentExercise] = $('cssEditor').value;
+  currentExercise = Math.max(0, Math.min(exercises.length - 1, index));
+  state.current = currentExercise;
+  saveState();
+
+  const ex = exercises[currentExercise];
+  $('exerciseSelect').value = String(currentExercise);
+  $('level').textContent = 'NÍVEL ' + ex.level;
+  $('title').textContent = (currentExercise + 1) + '. ' + ex.title;
+  $('description').textContent = ex.description;
+  $('task').textContent = ex.task;
+  $('tip').textContent = '📌 ' + ex.tip;
+  $('htmlCode').textContent = ex.html;
+  $('cssEditor').value = state.drafts[currentExercise] || '';
+  $('solutionCode').textContent = ex.solution;
+  $('hint').classList.remove('show');
+  $('hint').textContent = ex.hint;
+  $('feedback').className = 'feedback';
+  $('feedback').textContent = '';
+  $('prevBtn').disabled = currentExercise === 0;
+  $('nextBtn').textContent = currentExercise === exercises.length - 1 ? 'Último exercício' : 'Próximo →';
+  $('nextBtn').disabled = currentExercise === exercises.length - 1;
+  renderPreview();
+  atualizarBadgeEstado();
+  atualizarProgresso();
+}
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+loadState();
+
+exercises.forEach((e, i) => {
+  const o = document.createElement('option');
+  o.value = i;
+  o.textContent = (i + 1) + '. ' + e.title;
+  $('exerciseSelect').appendChild(o);
+});
+
+$('exerciseSelect').addEventListener('change', e => loadExercise(Number(e.target.value)));
+
+$('runBtn').addEventListener('click', () => {
+  renderPreview();
+  const res = avaliarCritérios($('cssEditor').value);
+  const passou = res.filter(r => r.ok).length;
+  if (res.length && passou === res.length) {
+    showFeedback('Todos os ' + res.length + ' critérios foram atendidos. Você pode marcar como concluído.', 'good');
+  } else {
+    showFeedback(passou + ' de ' + res.length + ' critérios atendidos. Veja a lista abaixo e ajuste o CSS.', 'info');
+  }
+  atualizarBadgeEstado();
+});
+
+let inputTimer = null;
+$('cssEditor').addEventListener('input', () => {
+  clearTimeout(inputTimer);
+  inputTimer = setTimeout(() => {
+    state.drafts[currentExercise] = $('cssEditor').value;
+    saveState();
+    renderPreview();
+    atualizarBadgeEstado();
+    atualizarProgresso();
+  }, 140);
+});
+
+$('resetBtn').addEventListener('click', () => {
+  $('cssEditor').value = '';
+  state.drafts[currentExercise] = '';
+  saveState();
+  renderPreview();
+  atualizarBadgeEstado();
+  atualizarProgresso();
+  showFeedback('Editor limpo. Escreva suas regras novamente.', 'info');
+});
+
+$('hintBtn').addEventListener('click', () => $('hint').classList.toggle('show'));
+
+$('doneBtn').addEventListener('click', () => {
+  const idx = currentExercise;
+  const isDone = state.completed.includes(idx);
+  if (isDone) {
+    state.completed = state.completed.filter(i => i !== idx);
+    saveState();
+    atualizarBadgeEstado();
+    atualizarProgresso();
+    showFeedback('Exercício reaberto. Você pode revisar ou continuar.', 'info');
+    return;
+  }
+  const res = avaliarCritérios($('cssEditor').value);
+  const falhas = res.filter(r => !r.ok);
+  if (falhas.length) {
+    showFeedback('Ainda não é possível concluir: ' + falhas.length + ' critério(s) pendente(s). Veja a lista abaixo do editor.', 'bad');
+    return;
+  }
+  state.completed.push(idx);
+  saveState();
+  atualizarBadgeEstado();
+  atualizarProgresso();
+  showFeedback('Exercício concluído. Você pode revisar ou seguir para o próximo.', 'good');
+});
+
+$('prevBtn').addEventListener('click', () => { if (currentExercise > 0) loadExercise(currentExercise - 1); });
+$('nextBtn').addEventListener('click', () => { if (currentExercise < exercises.length - 1) loadExercise(currentExercise + 1); });
+
+$('useSolutionBtn').addEventListener('click', () => {
+  $('cssEditor').value = exercises[currentExercise].solution;
+  state.drafts[currentExercise] = $('cssEditor').value;
+  saveState();
+  renderPreview();
+  atualizarBadgeEstado();
+  atualizarProgresso();
+  showFeedback('Solução carregada. Experimente alterar uma propriedade para observar o efeito.', 'good');
+  $('cssEditor').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+$('resetAllBtn').addEventListener('click', () => {
+  if (!confirm('Isso apaga todo o progresso e os rascunhos salvos. Continuar?')) return;
+  state = { current: 0, completed: [], drafts: {} };
+  saveState();
+  loadExercise(0);
+  showFeedback('Oficina zerada.', 'info');
+});
+
+$('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify({ versao: 3, exportadoEm: new Date().toISOString(), estado: state }, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'oficina-css-progresso.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  showFeedback('Progresso exportado como JSON.', 'good');
+});
+
+$('importBtn').addEventListener('click', () => $('importFile').click());
+
+$('importFile').addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const parsed = JSON.parse(String(reader.result));
+      const est = parsed && parsed.estado ? parsed.estado : parsed;
+      if (!est || typeof est !== 'object') throw new Error('formato inválido');
+      state = {
+        current: Number(est.current) || 0,
+        completed: Array.isArray(est.completed) ? est.completed.filter(n => Number.isInteger(n) && n >= 0 && n < exercises.length) : [],
+        drafts: est.drafts && typeof est.drafts === 'object' ? est.drafts : {}
+      };
+      saveState();
+      loadExercise(state.current);
+      showFeedback('Progresso importado com sucesso.', 'good');
+    } catch (err) {
+      showFeedback('Não foi possível importar: arquivo inválido.', 'bad');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+loadExercise(state.current || 0);
+</script>
+</body>
+</html>
